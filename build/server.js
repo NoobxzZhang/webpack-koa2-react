@@ -14,6 +14,7 @@ const log4js = require('log4js');
 
 const webpackDevConfig = require('./webpack.dev.conf');
 const webpackProConfig = require('./webpack.prod.conf');
+
 const webpackConfig = process.env.NODE_ENV === 'production' ? webpackProConfig : webpackDevConfig;
 const logConfig = require('../config/log');
 const socketRoute = require('../socket/route');
@@ -40,11 +41,14 @@ devMiddleware.waitUntilValid(() => {
   app.listen(globalConfig.port, err => {
     if (err) {
       console.log('Http Server start error', err);
-      globalConfig.logOutput && loggerError.error('Http Server start error', err);
+      if (globalConfig.logOutput) {
+        loggerError.error('Http Server start error', err);
+      }
     }
     console.log('Http Server listening on port', globalConfig.port);
-    globalConfig.logOutput &&
+    if (globalConfig.logOutput) {
       loggerInfo.info('Http Server listening on port', globalConfig.port, 'with pid', process.pid);
+    }
   });
 });
 
